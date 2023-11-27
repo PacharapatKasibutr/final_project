@@ -4,7 +4,7 @@ from database import Database, Readfile, Table
 my_database = Database()
 
 
-# define a funcion called initializing
+# define a function called initializing
 
 def initializing():
     read1 = Readfile()
@@ -18,7 +18,6 @@ def initializing():
     my_database.insert(project_table)
     advisor_pending_request = Table('advisor_pending_table', [])
     my_database.insert(advisor_pending_request)
-    # create  object and insert into database
     member_pending_request = Table('member_pending_table', [])
     my_database.insert(member_pending_request)
 
@@ -34,8 +33,8 @@ def login():
     my_user = my_login.table
     for data in my_user:
         if data["ID"] == username and data["password"] == password:
-            print(f"Welcome {data['username']}")
-            print(f"Permission: {data['role']}")
+            print(f"Hello {data['username']}")
+            print(f"Permission level: {data['role']}")
             return data
 
 

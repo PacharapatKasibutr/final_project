@@ -1,30 +1,48 @@
 # import database module
+import database
+from database import Database, Readfile, Table
+my_database = Database()
+
 
 # define a funcion called initializing
 
 def initializing():
-    pass
+    read1 = Readfile()
+    person_csv = read1.read_file("persons.csv")
+    login_csv = read1.read_file("login.csv")
+    persons_table = database.Table('persons', person_csv)
+    login_table = database.Table('login', login_csv)
+    my_database.insert(persons_table)
+    my_database.insert(login_table)
+    project_table = Table('project_table', [])
+    my_database.insert(project_table)
+    advisor_pending_request = Table('advisor_pending_table', [])
+    my_database.insert(advisor_pending_request)
+    # create  object and insert into database
+    member_pending_request = Table('member_pending_table', [])
+    my_database.insert(member_pending_request)
 
-# here are things to do in this function:
 
-    # create an object to read all csv files that will serve as a persistent state for this program
-
-    # create all the corresponding tables for those csv files
-
-    # see the guide how many tables are needed
-
-    # add all these tables to the database
 
 
 # define a funcion called login
 
 def login():
-    pass
+    username = str(input("Enter your username: "))
+    password = str(input("Enter your password: "))
+    my_login = my_database.search("login")
+    my_user = my_login.table
+    for data in my_user:
+        if data["ID"] == username and data["password"] == password:
+            print(f"Welcome {data['username']}")
+            print(f"Permission: {data['role']}")
+            return data
+
 
 # here are things to do in this function:
-   # add code that performs a login task
-        # ask a user for a username and password
-        # returns [ID, role] if valid, otherwise returning None
+# add code that performs a login task
+# ask a user for a username and password
+# returns [ID, role] if valid, otherwise returning None
 
 # define a function called exit
 def exit():

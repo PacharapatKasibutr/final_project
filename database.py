@@ -83,11 +83,11 @@ class Table:
     def insert(self, new_dict):
         self.table.append(new_dict)
 
-    # new code added as a requirement
-    def update(self, user_id, key, new_value):
+
+    def update(self, user_id, key, value):
         for i in self.table:
             if i['id'] == user_id:
                 index = self.table.index(i)
-                self.table[index][key] = new_value
+                self.table[index][key] = value
 
 

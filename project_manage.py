@@ -27,21 +27,22 @@ def initializing():
 # define a funcion called login
 
 def login():
-    username = str(input("Enter your username: "))
-    password = str(input("Enter your password: "))
-    my_login = my_database.search("login")
-    my_user = my_login.table
-    for data in my_user:
-        if data["ID"] == username and data["password"] == password:
-            print(f"Hello {data['username']}")
-            print(f"Permission level: {data['role']}")
-            return data
+    username = input("Enter your username: ")
+    password = input("Enter your password: ")
+    my_login = my_database.search("login").table
+    for data in my_login:
+        if data["username"] == username and data["password"] == password:
+            print([data['ID'], data['role']])
+            return [data['ID'], data['role']]
+        return None
+
 
 
 # here are things to do in this function:
 # add code that performs a login task
 # ask a user for a username and password
 # returns [ID, role] if valid, otherwise returning None
+# class Project():
 
 # define a function called exit
 def exit():

@@ -1,6 +1,8 @@
 # import database module
 import random
 import database
+import csv
+import sys
 from database import Database, Readfile, Table
 
 my_database = Database()
@@ -50,8 +52,8 @@ def exit():
 # make calls to the initializing and login functions defined above
 
 class Admin:
-    def __init__(self, u_id):
-        self.u_id = u_id
+    def __init__(self, user_id):
+        self.user_id = user_id
 
     def access(self):
         while True:
@@ -60,32 +62,25 @@ class Admin:
             print("2. View project")
             print("3. Delete student")
             print("4. Add student")
+            print("5.exit")
             user_input = int(input("Enter your choice: "))
-            if user_input in (1, 2, 3, 4):
-                return user_input
-            else:
-                print("invalid choice")
-
-    def process(self):
-        while True:
-            choice = self.access()
-            if choice == 1:
+            if user_input == 1:
                 for i in my_database.search('persons').table:
                     print(
                         f"ID: {i['ID']} Fullname: {i['fist']} {i['last']} Type: {i['type']}")
-            elif choice == 2:
+            elif user_input == 2:
                 num_project = 1
                 for i in my_database.search('project').table:
                     print(f'{num_project}. Title: {i["Title"]} Project: {i["ProjectID"]}')
                     num_project += 1
-            elif choice == 3:
+            elif user_input == 3:
                 student_id = str(input("Enter Student ID: "))
                 for i in my_database.search('persons').table:
                     if i['ID'] == student_id:
                         my_database.search('persons').table.pop(
                             my_database.search('persons').table.index(i))
                         print('Remove success')
-            elif choice == 4:
+            elif user_input == 4:
                 new_student = {}
                 new_student['ID'] = str(random.randint(1000000, 9999999))
                 new_student['fist'] = input("Input Firstname: ")
@@ -93,6 +88,115 @@ class Admin:
                 new_student['Type'] = input("Input Type: ")
                 my_database.search('persons').table.append(new_student)
                 print("Add success")
+            elif user_input == 5:
+                break
+            else:
+                print("invalid choice")
+
+
+class Student:
+    def __init__(self, user_id, user_name):
+        self.user_id = user_id
+        self.user_name = user_name
+
+
+    def see_request(self):
+        view = my_database.search('member_pending')
+        request = view.table.filter(lambda x: x['ID'] == self.user_id)
+        print(request)
+
+    def accept_decline(self):
+        request_table = my_database.search('member_pending')
+        project_table = my_database.search('project')
+        project_inv_id = input("Enter the project ID: ")
+        answer = input("Accept oe decline Y or N: ")
+        print(request_table)
+
+        if answer.lower() == 'y':
+            for i in project_table.filter(lambda x: x['ProjectID'] == project_inv_id).table:
+                if i['Member1'] == '-':
+                    project_table.update('ProjectID', project_inv_id, 'Member1', '-', 'Member1', self.user_id)
+                elif i['Member1'] != '-' and i['Member2'] == '-':
+                    project_table.update('ProjectID', project_inv_id, 'Member2', '-', 'Member2', self.user_id)
+                else:
+                    print('This group is already full')
+                break
+
+    def create_project(self):
+        project_title = input("Input your project name: ")
+        project_id = random.randint(100000, 999999)
+        create_proj = {'ProjectID': project_id,
+                       'Title': project_title,
+                       'Lead': self.user_id,
+                       'Member1': " ",
+                       'Member2': " ",
+                       'Advisor': 'Waiting',
+                       'Status': 'Processing'}
+        project_table.insert(create_proj)
+
+
+
+    def modify_project(self, project_id, new_title="", new_lead=""):
+        project_table = my_database.search('project')
+        project_table.update({'ProjectID': project_id, 'Title': new_title, 'Lead': new_lead})
+
+    def access(self):
+        while True:
+            print("1. create project")
+            print("2. view request")
+            print("3.accept or deny request")
+            print("4.Modify project")
+            print("5.exit")
+            user_input = int(input("Enter your choice: "))
+            if user_input == 1:
+                self.create_project()
+            if user_input == 2:
+                self.see_request()
+            if user_input == 3:
+                self.accept_decline()
+            if user_input == 4:
+                project_id = input("Enter project id: ")
+                new_title = input("Enter new title: ")
+                new_lead = input("Enter new lead: ")
+                self.modify_project(project_id, new_title, new_lead)
+            if user_input == 5:
+                break
+            else:
+                print("invalid choice")
+class Lead(Student):
+    def __init__(self, user_id, user_name, project_id):
+        super().__init__(user_id, user_name)
+        self.project_id = project_id
+
+    def access(self):
+        while True:
+            print("1. view project")
+            print("2. send invite")
+            print("3.request for advisor")
+            print("4.Modify project")
+            print("4.submit project")
+            print(".exit")
+
+
+
+
+
+class Faculty:
+    def __init__(self, user_id):
+        self.user_id = user_id
+
+    def accces(self):
+        while True:
+            print("1. check project request")
+            print("2. evaluate project")
+            user_input = int(input("Enter your choice: "))
+            if user_input in (1, 2):
+                return user_input
+            else:
+                print("invalid choice")
+
+    # def access(self):
+    #
 
 
 
@@ -112,12 +216,13 @@ class Admin:
 
 
 
-
-
-
-
-initializing()
+data = initializing()
 val = login()
+# login_table = data.search('login')
+# person_table = data.search('persons')
+# member_request = data.search('member_pending_request')
+# advisor_request = data.search('advisor_pending_request')
+project_table = data.search('project')
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 

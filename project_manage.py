@@ -11,19 +11,27 @@ my_database = Database()
 def initializing():
     read1 = Readfile()
     person_csv = read1.read_file("persons.csv")
-    login_csv = read1.read_file("login.csv")
     persons_table = database.Table('persons', person_csv)
-    login_table = database.Table('login', login_csv)
     my_database.insert(persons_table)
-    my_database.insert(login_table)
-    project_table = Table('project_table', [])
-    my_database.insert(project_table)
-    advisor_pending_request = Table('advisor_pending_table', [])
-    my_database.insert(advisor_pending_request)
-    member_pending_request = Table('member_pending_table', [])
-    my_database.insert(member_pending_request)
 
-# define a funcion called login
+    login_csv = read1.read_file("login.csv")
+    login_table = database.Table('login', login_csv)
+    my_database.insert(login_table)
+
+    advisor_pending_csv = read1.read_file("advisor_pending_request.csv")
+    advisor_pending_request_table = database.Table('advisor_pending_request', advisor_pending_csv)
+    my_database.insert(advisor_pending_request_table)
+
+    member_pending_csv = read1.read_file("member_pending_request.csv")
+    member_pending_request_table = database.Table('member_pending_request', member_pending_csv)
+    my_database.insert(member_pending_request_table)
+
+    project_csv = read1.read_file("project.csv")
+    project_table = database.Table('project', project_csv)
+    my_database.insert(project_table)
+
+
+# define a function called login
 def login():
     username = input("Enter your username: ")
     password = input("Enter your password: ")
@@ -171,8 +179,13 @@ class Lead(Student):
         print(project_table.filter(lambda x: x['ProjectID'] == self.project_id))
 
     def send_invitation(self, invite_id):
-        invite_table = my_database.search('member_pending')
-        invite_table.insert({'ProjectID': self.project_id, 'to_be_member': invite_id})
+        #
+
+
+
+
+
+
 
     def request_advisor(self):
         pass
@@ -183,8 +196,8 @@ class Lead(Student):
 
     def access(self):
         while True:
-            print("1. view project")
-            print("2. send invite")
+            print("1.view project")
+            print("2.send invite")
             print("3.request for advisor")
             print("4.Modify project")
             print("5.submit project")

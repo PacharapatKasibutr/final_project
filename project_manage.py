@@ -75,10 +75,14 @@ class Admin:
                     print(
                         f"ID: {i['ID']} Fullname: {i['fist']} {i['last']} Type: {i['type']}")
             elif user_input == 2:
-                num_project = 1
-                for i in my_database.search('project').table:
-                    print(f'{num_project}. Title: {i["Title"]} Project: {i["ProjectID"]}')
-                    num_project += 1
+                for project in my_database.search('project').table:
+                    print(f"Project ID: {project['ProjectID']}")
+                    print(f"Title: {project['Title']}")
+                    print(f"Lead: {project['Lead']}")
+                    print(f"Member1: {project['Member1']}")
+                    print(f"Member2: {project['Member2']}")
+                    print(f"Advisor: {project['Advisor']}")
+                    print(f"Status: {project['Status']}")
             elif user_input == 3:
                 student_id = str(input("Enter Student ID: "))
                 for i in my_database.search('persons').table:
@@ -115,7 +119,7 @@ class Student:
         request_table = my_database.search('member_pending')
         project_table = my_database.search('project')
         project_inv_id = input("Enter the project ID: ")
-        answer = input("Accept oe decline Y or N: ")
+        answer = input("Accept or decline Y or N: ")
         print(request_table)
 
         if answer.lower() == 'y':
@@ -155,6 +159,7 @@ class Student:
             print("5.exit")
             user_input = int(input("Enter your choice: "))
             if user_input == 1:
+                my_database.search('login').update('ID', self.user_id, 'role', 'lead')
                 self.create_project()
             if user_input == 2:
                 self.see_request()
@@ -175,22 +180,38 @@ class Lead(Student):
         self.project_id = project_id
 
     def view_project(self):
-        print(project_table.filter(lambda x: x['ProjectID'] == self.project_id))
-
-    def send_invitation(self, invite_id):
-        #
-
-
-
-
-
-
+        view_pro = project_table
+        for project in view_pro:
+            print(f"ProjectID: {project['ProjectID']}")
+            print(f"Title: {project['Title']}")
+            print(f"Lead: {project['Lead']}")
+            print(f"Member1: {project['Member1']}")
+            print(f"Member2: {project['Member2']}")
+            print(f"Advisor: {project['Advisor']}")
+            print(f"Status: {project['Status']}")
+    def send_invitation(self):
+        invite = input("Enter student ID for invitation: ")
+        member_request_table = my_database.search('member_pending_request')
+        if member_request_table:
+            member_request_table.insert({'ProjectID': self.project_id, 'to_be_member': invite})
+        else:
+            print("Wrong ID!")
 
     def request_advisor(self):
-        pass
+        advisor = input("Enter advisor ID: ")
+        advisor_request_table = my_database.search('advisor_pending_request')
+        if advisor_request_table:
+            advisor_request_table.insert({'ProjectID': self.project_id, 'to_be_member': advisor})
 
     def submit_project(self):
-        pass
+        submit = input("Submitting project y or no: ")
+        if submit.lower() == "y":
+            project_table = my_database.search('project')
+            if project_table:
+                project_table.insert({'ProjectID': self.project_id, 'Status': "submitted"})
+        else:
+            print("cancel")
+
 
 
     def access(self):
@@ -227,14 +248,20 @@ class Member(Student):
         self.project_id = project_id
 
     def view_project(self):
-        print(project_table.filter(lambda x: x['ProjectID'] == self.project_id))
-
+        view_pro = project_table
+        for project in view_pro:
+            print(f"ProjectID: {project['ProjectID']}")
+            print(f"Title: {project['Title']}")
+            print(f"Lead: {project['Lead']}")
+            print(f"Member1: {project['Member1']}")
+            print(f"Member2: {project['Member2']}")
+            print(f"Advisor: {project['Advisor']}")
+            print(f"Status: {project['Status']}")
     def access(self):
         while True:
             print("1. View Project")
             print("2. Modify Project")
-            print("3. Create project")
-            print("4.exit")
+            print("3.exit")
             user_input = int(input("Enter your choice: "))
             if user_input == 1:
                 self.view_project()
@@ -244,12 +271,9 @@ class Member(Student):
                 new_lead = input("Enter new lead: ")
                 self.modify_project(project_id, new_title, new_lead)
             if user_input == 3:
-                self.create_project()
-            if user_input == 4:
                 break
             else:
                 print("invalid choice")
-
 
 
 
@@ -294,7 +318,7 @@ project_table = my_database.search('project')
 # login_table = my_database.search('login')
 # person_table = my_database.search('persons')
 # member_request = my_database.search('member_pending_request')
-advisor_request = my_database.search('advisor_pending_request')
+# advisor_request = my_database.search('advisor_pending_request')
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 

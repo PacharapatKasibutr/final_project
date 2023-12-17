@@ -31,7 +31,6 @@ def login():
     for data in my_login:
         if data["username"] == username and data["password"] == password:
             return [data['ID'], data['role']]
-        print("Wrong username or password")
         return None
 
 # here are things to do in this function:
@@ -41,7 +40,7 @@ def login():
 
 # define a function called exit
 def exit():
-    pass
+   pass
 
 # here are things to do in this function:
    # write out all the tables that have been modified to the corresponding csv files
@@ -142,8 +141,8 @@ class Student:
 
     def access(self):
         while True:
-            print("1. create project")
-            print("2. view request")
+            print("1.create project")
+            print("2.view request")
             print("3.accept or deny request")
             print("4.Modify project")
             print("5.exit")
@@ -168,15 +167,76 @@ class Lead(Student):
         super().__init__(user_id, user_name)
         self.project_id = project_id
 
+    def view_project(self):
+        print(project_table.filter(lambda x: x['ProjectID'] == self.project_id))
+
+    def send_invitation(self, invite_id):
+        invite_table = my_database.search('member_pending')
+        invite_table.insert({'ProjectID': self.project_id, 'to_be_member': invite_id})
+
+    def request_advisor(self):
+        pass
+
+    def submit_project(self):
+        pass
+
+
     def access(self):
         while True:
             print("1. view project")
             print("2. send invite")
             print("3.request for advisor")
             print("4.Modify project")
-            print("4.submit project")
-            print(".exit")
+            print("5.submit project")
+            print("6.exit")
+            user_input = int(input("Enter your choice: "))
+            if user_input == 1:
+                self.view_project()
+            if user_input == 2:
+                self.send_invitation()
+            if user_input == 3:
+                self.request_advisor()
+            if user_input == 4:
+                project_id = input("Enter project id: ")
+                new_title = input("Enter new title: ")
+                new_lead = input("Enter new lead: ")
+                self.modify_project(project_id, new_title, new_lead)
+            if user_input == 5:
+                self.submit_project()
+            if user_input == 6:
+                break
+            else:
+                print("invalid choice")
 
+
+class Member(Student):
+    def __init__(self, user_id, user_name, project_id):
+        super().__init__(user_id, user_name)
+        self.project_id = project_id
+
+    def view_project(self):
+        print(project_table.filter(lambda x: x['ProjectID'] == self.project_id))
+
+    def access(self):
+        while True:
+            print("1. View Project")
+            print("2. Modify Project")
+            print("3. Create project")
+            print("4.exit")
+            user_input = int(input("Enter your choice: "))
+            if user_input == 1:
+                self.view_project()
+            if user_input == 2:
+                project_id = input("Enter project id: ")
+                new_title = input("Enter new title: ")
+                new_lead = input("Enter new lead: ")
+                self.modify_project(project_id, new_title, new_lead)
+            if user_input == 3:
+                self.create_project()
+            if user_input == 4:
+                break
+            else:
+                print("invalid choice")
 
 
 
@@ -199,6 +259,8 @@ class Faculty:
     #
 
 
+class Advisor:
+    pass
 
 
 
@@ -214,15 +276,13 @@ class Faculty:
 
 
 
-
-
-data = initializing()
+initializing()
 val = login()
-# login_table = data.search('login')
-# person_table = data.search('persons')
-# member_request = data.search('member_pending_request')
-# advisor_request = data.search('advisor_pending_request')
-project_table = data.search('project')
+project_table = my_database.search('project')
+# login_table = my_database.search('login')
+# person_table = my_database.search('persons')
+# member_request = my_database.search('member_pending_request')
+advisor_request = my_database.search('advisor_pending_request')
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 

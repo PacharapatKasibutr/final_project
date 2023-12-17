@@ -30,7 +30,6 @@ def initializing():
     project_table = database.Table('project', project_csv)
     my_database.insert(project_table)
 
-
 # define a function called login
 def login():
     username = input("Enter your username: ")

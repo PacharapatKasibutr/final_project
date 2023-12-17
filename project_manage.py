@@ -71,10 +71,9 @@ def exit():
 # make calls to the initializing and login functions defined above
 
 class Admin:
-    def __init__(self, user_id, user_first, user_last):
+    def __init__(self, user_id):
         self.user_id = user_id
-        self.user_first = user_first
-        self.user_last = user_last
+
 
     def access(self):
         while True:
@@ -119,10 +118,9 @@ class Admin:
 
 
 class Student:
-    def __init__(self, user_id, user_first, user_last):
+    def __init__(self, user_id):
         self.user_id = user_id
-        self.user_first = user_first
-        self.user_last = user_last
+
 
 
     def see_request(self):
@@ -190,8 +188,8 @@ class Student:
             else:
                 print("invalid choice")
 class Lead(Student):
-    def __init__(self, user_id, user_first, user_last, project_id):
-        super().__init__(user_id, user_first, user_last)
+    def __init__(self, user_id, project_id):
+        super().__init__(user_id)
         self.project_id = project_id
 
     def view_project(self):
@@ -258,8 +256,8 @@ class Lead(Student):
 
 
 class Member(Student):
-    def __init__(self, user_id, user_name, user_last, project_id):
-        super().__init__(user_id, user_name, user_last)
+    def __init__(self, user_id, project_id):
+        super().__init__(user_id)
         self.project_id = project_id
 
     def view_project(self):
@@ -293,10 +291,9 @@ class Member(Student):
 
 
 class Faculty:
-    def __init__(self, user_id, user_first, user_last):
+    def __init__(self, user_id):
         self.user_id = user_id
-        self.user_first = user_first
-        self.user_last = user_last
+
 
     def view_project(self):
         view_pro = project_table
@@ -354,8 +351,8 @@ class Faculty:
 
 
 class Advisor(Faculty):
-    def __init__(self, user_id, user_first, user_last):
-        super().__init__(user_id, user_first, user_last)
+    def __init__(self, user_id):
+        super().__init__(user_id)
 
     def response(self):
         project_id = input("Enter project ID : ")
@@ -389,8 +386,34 @@ class Advisor(Faculty):
 initializing()
 val = login()
 project_table = my_database.search('project')
+# if val:
+#     if val[1] == 'admin':
+#             print("Admin permission")
+#             admin = Admin(val[0])
+#             admin.access()
+#     elif val[1] == 'student':
+#             print("student permission")
+#             student = Student(val[0])
+#             student.access()
+#     elif val[1] == 'lead':
+#             print("lead permission")
+#             lead = Student(val[0])
+#             lead.access()
+#     elif val[1] == 'member':
+#             print("member permission")
+#             member = Student(val[0])
+#             member.access()
+#     elif val[1] == 'faculty':
+#             print("faculty permission")
+#             faculty = Faculty(val[0])
+#             faculty.access()
+#     elif val[1] == 'advisor':
+#             print("advisor permission")
+#             advisor = Faculty(val[0])
+#             advisor.access()
 
 
+#
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 

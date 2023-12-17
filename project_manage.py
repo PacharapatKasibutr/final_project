@@ -58,8 +58,10 @@ def exit():
 # make calls to the initializing and login functions defined above
 
 class Admin:
-    def __init__(self, user_id):
+    def __init__(self, user_id, user_first, user_last):
         self.user_id = user_id
+        self.user_first = user_first
+        self.user_last = user_last
 
     def access(self):
         while True:
@@ -105,9 +107,10 @@ class Admin:
 
 
 class Student:
-    def __init__(self, user_id, user_name):
+    def __init__(self, user_id, user_first, user_last):
         self.user_id = user_id
-        self.user_name = user_name
+        self.user_first = user_first
+        self.user_last = user_last
 
 
     def see_request(self):
@@ -161,22 +164,22 @@ class Student:
             if user_input == 1:
                 my_database.search('login').update('ID', self.user_id, 'role', 'lead')
                 self.create_project()
-            if user_input == 2:
+            elif user_input == 2:
                 self.see_request()
-            if user_input == 3:
+            elif user_input == 3:
                 self.accept_decline()
-            if user_input == 4:
+            elif user_input == 4:
                 project_id = input("Enter project id: ")
                 new_title = input("Enter new title: ")
                 new_lead = input("Enter new lead: ")
                 self.modify_project(project_id, new_title, new_lead)
-            if user_input == 5:
+            elif user_input == 5:
                 break
             else:
                 print("invalid choice")
 class Lead(Student):
-    def __init__(self, user_id, user_name, project_id):
-        super().__init__(user_id, user_name)
+    def __init__(self, user_id, user_first, user_last, project_id):
+        super().__init__(user_id, user_first, user_last)
         self.project_id = project_id
 
     def view_project(self):
@@ -225,18 +228,18 @@ class Lead(Student):
             user_input = int(input("Enter your choice: "))
             if user_input == 1:
                 self.view_project()
-            if user_input == 2:
+            elif user_input == 2:
                 self.send_invitation()
-            if user_input == 3:
+            elif user_input == 3:
                 self.request_advisor()
-            if user_input == 4:
+            elif user_input == 4:
                 project_id = input("Enter project id: ")
                 new_title = input("Enter new title: ")
                 new_lead = input("Enter new lead: ")
                 self.modify_project(project_id, new_title, new_lead)
-            if user_input == 5:
+            elif user_input == 5:
                 self.submit_project()
-            if user_input == 6:
+            elif user_input == 6:
                 break
             else:
                 print("invalid choice")
@@ -265,12 +268,12 @@ class Member(Student):
             user_input = int(input("Enter your choice: "))
             if user_input == 1:
                 self.view_project()
-            if user_input == 2:
+            elif user_input == 2:
                 project_id = input("Enter project id: ")
                 new_title = input("Enter new title: ")
                 new_lead = input("Enter new lead: ")
                 self.modify_project(project_id, new_title, new_lead)
-            if user_input == 3:
+            elif user_input == 3:
                 break
             else:
                 print("invalid choice")
@@ -278,16 +281,26 @@ class Member(Student):
 
 
 class Faculty:
-    def __init__(self, user_id):
+    def __init__(self, user_id, user_first, user_last):
         self.user_id = user_id
+        self.user_first = user_first
+        self.user_last = user_last
 
     def accces(self):
         while True:
-            print("1. check project request")
-            print("2. evaluate project")
+            print("1.check project request")
+            print("2.view project")
+            print("3.evaluate project")
+            print("4.exit")
             user_input = int(input("Enter your choice: "))
-            if user_input in (1, 2):
-                return user_input
+            if user_input == 1:
+                pass
+            elif user_input == 2:
+                self.view_project()
+            elif user_input == 3:
+                pass
+            elif user_input == 4:
+                pass
             else:
                 print("invalid choice")
 

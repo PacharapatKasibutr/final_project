@@ -47,8 +47,21 @@ def login():
 
 # define a function called exit
 def exit():
-   pass
-
+    for _ in my_database.database:
+        if _.table != []:
+            filename = _.table_name + ".csv"
+            myFile = open(filename, "w", newline="")
+            writer = csv.writer(myFile)
+            writer.writerow(Head for Head in _.table[0])
+            for dictionary in _.table:
+                writer.writerow(dictionary.values())
+            myFile.close()
+            with open(filename) as myFile:
+                lines = myFile.readlines()
+                last_line = lines[len(lines)-1]
+                lines[len(lines)-1] = last_line.rstrip()
+            with open(filename, 'w') as myFile:
+                myFile.writelines(lines)
 # here are things to do in this function:
    # write out all the tables that have been modified to the corresponding csv files
    # By now, you know how to read in a csv file and transform it into a list of dictionaries. For this project, you also need to know how to do the reverse, i.e., writing out to a csv file given a list of dictionaries. See the link below for a tutorial on how to do this:
@@ -65,7 +78,6 @@ class Admin:
 
     def access(self):
         while True:
-            print("admin access")
             print("1. View student")
             print("2. View project")
             print("3. Delete student")
@@ -246,8 +258,8 @@ class Lead(Student):
 
 
 class Member(Student):
-    def __init__(self, user_id, user_name, project_id):
-        super().__init__(user_id, user_name)
+    def __init__(self, user_id, user_name, user_last, project_id):
+        super().__init__(user_id, user_name, user_last)
         self.project_id = project_id
 
     def view_project(self):
@@ -286,7 +298,43 @@ class Faculty:
         self.user_first = user_first
         self.user_last = user_last
 
-    def accces(self):
+    def view_project(self):
+        view_pro = project_table
+        for project in view_pro:
+            print(f"ProjectID: {project['ProjectID']}")
+            print(f"Title: {project['Title']}")
+            print(f"Lead: {project['Lead']}")
+            print(f"Member1: {project['Member1']}")
+            print(f"Member2: {project['Member2']}")
+            print(f"Advisor: {project['Advisor']}")
+            print(f"Status: {project['Status']}")
+
+    def check_request(self):
+        request_table = my_database.search('advisor_pending_request')
+        for request in request_table.table:
+            if request['to_be_member'] == self.user_id:
+                print("You have request")
+            else:
+                print("You have no request")
+
+    def evaluate_project(self):
+        project_to_evaluate = input("Enter project id: ")
+        if not project_to_evaluate in project_table:
+            print("incorrect id")
+        evaluate = input("Enter approve or not: ")
+        if evaluate.lower() != "approve" or "not":
+            print("invalid answer please enter approve or not")
+        if evaluate == "approve":
+            for project in project_table.table:
+                if project['ProjectID'] == project_to_evaluate:
+                    project['Status'] == 'Approved'
+        for project in project_table.table:
+            if project['ProjectID'] == project_to_evaluate:
+                if project['Status'] == 'Submitted' or project['Status'] == 'Approved':
+                    project['Status'] == "evaluated"
+
+
+    def access(self):
         while True:
             print("1.check project request")
             print("2.view project")
@@ -294,44 +342,55 @@ class Faculty:
             print("4.exit")
             user_input = int(input("Enter your choice: "))
             if user_input == 1:
-                pass
+                self.check_request()
             elif user_input == 2:
                 self.view_project()
             elif user_input == 3:
-                pass
+                self.evaluate_project()
             elif user_input == 4:
-                pass
+                break
             else:
                 print("invalid choice")
 
-    # def access(self):
-    #
 
+class Advisor(Faculty):
+    def __init__(self, user_id, user_first, user_last):
+        super().__init__(user_id, user_first, user_last)
 
-class Advisor:
-    pass
+    def response(self):
+        project_id = input("Enter project ID : ")
+        response = input("accept the invitation y or n: ")
+        if response.lower() == 'y':
+            for project in project_table.table:
+                if project['ProjectID'] == project_id:
+                    project['Advisor'] = self.user_id
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def access(self):
+        while True:
+            print("1.check project request")
+            print("2.view project")
+            print("3.evaluate project")
+            print("4.response")
+            print("5.exit")
+            user_input = int(input("Enter your choice: "))
+            if user_input == 1:
+                self.check_request()
+            elif user_input == 2:
+                self.view_project()
+            elif user_input == 3:
+                self.evaluate_project()
+            elif user_input == 4:
+                self.response()
+            elif user_input == 5:
+                break
+            else:
+                print("invalid choice")
 
 initializing()
 val = login()
 project_table = my_database.search('project')
-# login_table = my_database.search('login')
-# person_table = my_database.search('persons')
-# member_request = my_database.search('member_pending_request')
-# advisor_request = my_database.search('advisor_pending_request')
+
+
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 
@@ -348,5 +407,5 @@ project_table = my_database.search('project')
 # elif val[1] = 'advisor':
     # see and do advisor related activities
 
-# once everyhthing is done, make a call to the exit function
+# once everything is done, make a call to the exit function
 exit()

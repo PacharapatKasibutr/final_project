@@ -57,4 +57,6 @@
 
 ## missing feature and bug
 * missing some admin command such as update tabow for admin and insert row
-* some of the function doesn't seem to work 
+* some of the function doesn't seem to work
+* project request ,evaluate project seem to have an error
+* create project have subscriptable problem

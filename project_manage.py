@@ -180,8 +180,10 @@ class Student:
             print("5.exit")
             user_input = int(input("Enter your choice: "))
             if user_input == 1:
-                my_database.search('login').update('ID', self.user_id, 'role', 'lead')
+                persons_table = my_database.search('persons')
+                login_table = my_database.search('login')
                 self.create_project()
+                login_table.update({'role': 'lead'}, {'ID': persons_table['ID']})
             elif user_input == 2:
                 self.see_request()
             elif user_input == 3:

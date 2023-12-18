@@ -1,3 +1,15 @@
+## File in this repo
+* Proposal.md
+* README.md
+* TODO.md
+* advisor_pending_request.csv
+* database.py
+* login.csv
+* member_pending_request.csv
+* persons.csv
+* project.csv
+* project_manage.py
+  
 ## How to use
 * run project_manage
 

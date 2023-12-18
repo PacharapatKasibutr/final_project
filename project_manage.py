@@ -32,13 +32,15 @@ def initializing():
 
 # define a function called login
 def login():
+    result = None
     username = input("Enter your username: ")
     password = input("Enter your password: ")
-    my_login = my_database.search("login").table
-    for data in my_login:
-        if data["username"] == username and data["password"] == password:
-            return [data['ID'], data['role']]
-        return None
+    my_login = my_database.search("login")
+    for data in my_login.table:
+        if username == data["username"] and password == data["password"]:
+            result = [data['ID'], data['role']]
+            break
+    return result
 
 # here are things to do in this function:
 # add code that performs a login task
@@ -121,12 +123,18 @@ class Student:
     def __init__(self, user_id):
         self.user_id = user_id
 
-
-
     def see_request(self):
-        view = my_database.search('member_pending')
-        request = view.table.filter(lambda x: x['ID'] == self.user_id)
-        print(request)
+        view = my_database.search('member_pending_request')
+        if view:
+            request_data = [req for req in view.table if req['to_be_member'] == self.user_id]
+
+            if request_data:
+                for req in request_data:
+                    print(req)
+            else:
+                print("No pending requests found.")
+        else:
+            print("Member pending request table not found.")
 
     def accept_decline(self):
         request_table = my_database.search('member_pending')
@@ -411,9 +419,6 @@ if val:
             print("advisor permission")
             advisor = Faculty(val[0])
             advisor.access()
-
-
-#
 
 # based on the return value for login, activate the code that performs activities according to the role defined for that person_id
 

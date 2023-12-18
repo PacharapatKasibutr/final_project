@@ -386,31 +386,31 @@ class Advisor(Faculty):
 initializing()
 val = login()
 project_table = my_database.search('project')
-# if val:
-#     if val[1] == 'admin':
-#             print("Admin permission")
-#             admin = Admin(val[0])
-#             admin.access()
-#     elif val[1] == 'student':
-#             print("student permission")
-#             student = Student(val[0])
-#             student.access()
-#     elif val[1] == 'lead':
-#             print("lead permission")
-#             lead = Student(val[0])
-#             lead.access()
-#     elif val[1] == 'member':
-#             print("member permission")
-#             member = Student(val[0])
-#             member.access()
-#     elif val[1] == 'faculty':
-#             print("faculty permission")
-#             faculty = Faculty(val[0])
-#             faculty.access()
-#     elif val[1] == 'advisor':
-#             print("advisor permission")
-#             advisor = Faculty(val[0])
-#             advisor.access()
+if val:
+    if val[1] == 'admin':
+            print("Admin permission")
+            admin = Admin(val[0])
+            admin.access()
+    elif val[1] == 'student':
+            print("student permission")
+            student = Student(val[0])
+            student.access()
+    elif val[1] == 'lead':
+            print("lead permission")
+            lead = Student(val[0])
+            lead.access()
+    elif val[1] == 'member':
+            print("member permission")
+            member = Student(val[0])
+            member.access()
+    elif val[1] == 'faculty':
+            print("faculty permission")
+            faculty = Faculty(val[0])
+            faculty.access()
+    elif val[1] == 'advisor':
+            print("advisor permission")
+            advisor = Faculty(val[0])
+            advisor.access()
 
 
 #

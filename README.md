@@ -48,7 +48,7 @@
 |  Member |                 view project                  |        view_project        |      Member     |          90%          |
 |  Member |         access to different function          |           access           |      Member     |         100%          |
 | Faculty |                 view project                  |        view_project        |     Faculty     |          90%          |
-| Faculty |                 check request                 |       check_request        |     Faculty     |          80%          |
+| Faculty |                 check request                 |       check_request        |     Faculty     |          70%          |
 | Faculty |          Evaluated assigned projects          |      evaluate_project      |     Faculty     |          80%          |
 | Faculty |         access to different function          |           access           |     Faculty     |         100%          |
 | Advisor |                   response                    |          response          |     Advisor     |          90%          |
